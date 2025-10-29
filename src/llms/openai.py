@@ -6,14 +6,11 @@ try:
     from openai import OpenAI
 except Exception:  # pragma: no cover
     OpenAI = None  # type: ignore
+from dotenv import load_dotenv
 
 
 def get_env_var(name: str, required: bool = True) -> Optional[str]:
-    """Obtém variável de ambiente e valida se obrigatória.
-
-    Observação: Se estiver usando arquivo .env, instale python-dotenv e chame
-    load_dotenv() antes de usar este módulo, ou exporte as variáveis no shell.
-    """
+    load_dotenv() 
     value = os.getenv(name)
     if required and not value:
         raise RuntimeError(f"Variável de ambiente ausente: {name}")
@@ -45,6 +42,7 @@ def list_model_ids() -> list[str]:
 
 
 __all__ = [
+    "get_env_var",
     "get_openai_client",
     "list_model_ids",
 ]
