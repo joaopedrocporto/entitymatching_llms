@@ -1,5 +1,5 @@
 import os
-from typing import Any, Optional
+from typing import Any, Optional, List
 
 try:
     # SDK v1
@@ -34,7 +34,7 @@ def get_openai_client() -> Any:
     return OpenAI(**client_kwargs)  # type: ignore[arg-type]
 
 
-def list_model_ids() -> list[str]:
+def list_model_ids() -> List[str]:
     """Lista IDs de modelos disponíveis (requer permissões adequadas)."""
     client = get_openai_client()
     models = client.models.list()

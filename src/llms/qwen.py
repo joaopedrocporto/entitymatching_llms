@@ -3,11 +3,15 @@ import re
 model_name = "Qwen/Qwen3Guard-Gen-8B"
 
 # load the tokenizer and the model
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(
+    model_name,
+    trust_remote_code=True,
+)
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     torch_dtype="auto",
-    device_map="auto"
+    device_map="auto",
+    trust_remote_code=True,
 )
 def extract_label_and_categories(content):
     safe_pattern = r"Safety: (Safe|Unsafe|Controversial)"
