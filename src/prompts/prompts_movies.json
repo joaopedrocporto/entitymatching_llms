@@ -1,0 +1,40 @@
+{
+  "prompts": [
+    {
+      "technique": "zero_shot",
+      "variant": "general",
+      "domain": "movies",
+      "prompt": "You will receive two movie records (Movie A and Movie B). One may come from IMDb (e.g. primaryTitle, startYear, genres) and the other from TMDB (e.g. title, release_date, genres). Both use genre names (e.g. Drama, Comedy, Science Fiction). Your task is to decide if they refer to the same real-world film (i.e., they are duplicates).\n\nCarefully consider:\n- Title and original title (small variations, abbreviations, punctuation)\n- Release year or full release date\n- Genres (same names on both sides; minor wording differences like Sci-Fi vs Science Fiction)\n- Adult content flag if present\n\nAnswer strictly with one token:\n- YES  → if A and B are the same film\n- NO   → if A and B are different films\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "zero_shot",
+      "variant": "domain_specific",
+      "domain": "movies",
+      "prompt": "You are an expert in Film Entity Matching. You will receive two movie records (Movie A and Movie B) that may use different attribute names (e.g. primaryTitle vs title, startYear vs release_date). Both provide genres as names (e.g. Drama, Comedy, Adventure). Decide if they represent the same real-world movie.\n\nConsider in particular:\n- Primary title / title and original title\n- Release year (startYear, or year from release_date)\n- Genres (comma-separated names on both sides)\n- Clear differences that indicate different films\n\nAnswer strictly with one token:\n- YES  → if the two records are the same film\n- NO   → if they are different films\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "few_shot",
+      "variant": "positive_negative",
+      "domain": "movies",
+      "prompt": "You are an expert in Film Entity Matching. You will be given a few labeled examples, then a new pair to classify. Records may come from IMDb and TMDB with different field names.\n\nTask: decide if Movie A and Movie B refer to the same film.\n\nExamples:\n[EXAMPLE 1 – DUPLICATE]\nMovie A: primaryTitle \"Greenland 2: Migration\", startYear 2026, genres Adventure,Thriller,Science Fiction\nMovie B: title \"Greenland 2: Migration\", release_date 2026-01-07, genres Adventure,Thriller,Science Fiction\nLabel: YES\n\n[EXAMPLE 2 – NOT DUPLICATE]\nMovie A: primaryTitle \"The Wrecking Crew\", startYear 2026, genres Action,Comedy,Crime\nMovie B: title \"Primate\", release_date 2026-01-01, genres Horror,Thriller\nLabel: NO\n\nNow classify the new pair. Answer strictly with one token:\n- YES  → if they are the same film\n- NO   → if they are not\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "few_shot",
+      "variant": "negative_positive",
+      "domain": "movies",
+      "prompt": "You are an expert in Film Entity Matching. You will see a few labeled examples (first non-duplicates, then duplicates), then a new pair. Records may use IMDb-style or TMDB-style attributes.\n\nTask: decide if Movie A and Movie B refer to the same film.\n\nExamples:\n[EXAMPLE 1 – NOT DUPLICATE]\nMovie A: primaryTitle \"Space/Time\", startYear 2025\nMovie B: title \"Zootopia 2\", release_date 2025-11-26\nLabel: NO\n\n[EXAMPLE 2 – DUPLICATE]\nMovie A: primaryTitle \"Space/Time\", startYear 2025, genres Science Fiction,Action,Thriller\nMovie B: title \"Space/Time\", release_date 2025-05-01, genres Science Fiction,Action,Thriller\nLabel: YES\n\nNow classify the new pair. Answer strictly with one token:\n- YES  → if they are the same film\n- NO   → if they are not\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "chain_of_thought",
+      "variant": "guided_comparison",
+      "domain": "movies",
+      "prompt": "You are an expert in Film Entity Matching. Your task is to decide if two movie records (A and B), possibly from IMDb and TMDB with different attribute names, refer to the same film.\n\nThink step by step:\n1. Compare main titles (primaryTitle / title) and original titles.\n2. Compare release year (startYear or year from release_date).\n3. Compare genres if available (both sides use genre names; note minor variants like Sci-Fi vs Science Fiction).\n4. Note strong similarities and any clear differences.\n5. Based on this, decide if they are the same film.\n\nFirst, write your reasoning in a short paragraph.\nThen, on a new line, output the final label:\nANSWER: YES\nor\nANSWER: NO\n\nDo not use any other labels."
+    },
+    {
+      "technique": "structured_prompting",
+      "variant": "template",
+      "domain": "movies",
+      "prompt": "You are an expert in Film Entity Matching. Movie A and Movie B may use different attribute names (IMDb vs TMDB). Fill in the comparison and then give a final YES/NO decision.\n\nMOVIE A\n--------\nTitle / primaryTitle:\nOriginal title:\nYear / release_date:\nGenres (if present):\n\nMOVIE B\n--------\nTitle / primaryTitle:\nOriginal title:\nYear / release_date:\nGenres (if present):\n\nCOMPARISON\n----------\nSimilarities:\nDifferences:\n\nDECISION\n--------\nDo Movie A and Movie B refer to the same real-world film?\n\nAnswer strictly with one token on the last line:\nYES\nor\nNO"
+    }
+  ]
+}

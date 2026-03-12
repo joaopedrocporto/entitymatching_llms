@@ -1,0 +1,40 @@
+{
+  "prompts": [
+    {
+      "technique": "zero_shot",
+      "variant": "general",
+      "domain": "books",
+      "prompt": "You will receive two book records (Book A and Book B) from the matchbench/semi-homo repository (Hugging Face). Both have the same attribute schema. Your task is to decide if they refer to the same real-world book (i.e., they are duplicates).\n\nCarefully consider:\n- Small textual variations (abbreviations, punctuation, spelling)\n- Different formats for titles, author names, ISBN, edition, year\n- Missing or slightly different values for the same attributes\n\nAnswer strictly with one token:\n- YES  → if A and B are duplicates (same book)\n- NO   → if A and B are not duplicates\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "zero_shot",
+      "variant": "domain_specific",
+      "domain": "books",
+      "prompt": "You are an expert in Book Entity Matching for the matchbench/semi-homo benchmark (Hugging Face). You will receive two book records (Book A and Book B) with the same attribute structure. Decide if they represent the same real-world book.\n\nConsider in particular:\n- Title and subtitle\n- Author(s)\n- ISBN (if present)\n- Publisher, edition, publication year\n- Obvious differences that indicate different books\n\nAnswer strictly with one token:\n- YES  → if the two books are duplicates (same book)\n- NO   → if they are different books\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "few_shot",
+      "variant": "positive_negative",
+      "domain": "books",
+      "prompt": "You are an expert in Book Entity Matching for the matchbench/semi-homo repository (Hugging Face). You will be given a few labeled examples first, and then a new pair to classify. Both sides of each pair share the same attribute schema (book records).\n\nTask: decide if Book A and Book B are duplicates (same real-world book).\n\nExamples:\n[EXAMPLE 1 – DUPLICATE]\nBook A: \"Clean Code: A Handbook of Agile Software Craftsmanship\" by Robert C. Martin, Prentice Hall 2008\nBook B: \"Clean Code - Handbook of Agile Software Craftsmanship\", R. Martin, 2008\nLabel: YES\n\n[EXAMPLE 2 – NOT DUPLICATE]\nBook A: \"The Great Gatsby\" by F. Scott Fitzgerald\nBook B: \"To Kill a Mockingbird\" by Harper Lee\nLabel: NO\n\nNow classify the new pair. Answer strictly with one token:\n- YES  → if they are duplicates\n- NO   → if they are not duplicates\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "few_shot",
+      "variant": "negative_positive",
+      "domain": "books",
+      "prompt": "You are an expert in Book Entity Matching for the matchbench/semi-homo repository (Hugging Face). You will see a few labeled examples that start with non-duplicates and then duplicates. Pairs share the same attribute schema (book records).\n\nTask: decide if Book A and Book B are duplicates (same real-world book).\n\nExamples:\n[EXAMPLE 1 – NOT DUPLICATE]\nBook A: \"1984\" by George Orwell\nBook B: \"Animal Farm\" by George Orwell\nLabel: NO\n\n[EXAMPLE 2 – DUPLICATE]\nBook A: \"Design Patterns: Elements of Reusable Object-Oriented Software\", Gamma et al., Addison-Wesley 1994\nBook B: \"Design Patterns - Elements of Reusable OO Software\" by Gamma, Helm, Johnson, Vlissides, 1994\nLabel: YES\n\nNow classify the new pair. Answer strictly with one token:\n- YES  → if they are duplicates\n- NO   → if they are not duplicates\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "chain_of_thought",
+      "variant": "guided_comparison",
+      "domain": "books",
+      "prompt": "You are an expert in Book Entity Matching for the matchbench/semi-homo benchmark (Hugging Face). Your task is to decide if two book records (A and B) with the same attribute schema are duplicates (same book).\n\nThink step by step:\n1. Compare book titles (and subtitles if present).\n2. Compare author(s).\n3. Compare other key attributes (ISBN, publisher, edition, year).\n4. Note any strong similarities and any strong differences.\n5. Based on this reasoning, decide if they are the same book.\n\nFirst, write your reasoning in a short paragraph.\nThen, on a new line, output the final label in the format:\nANSWER: YES\nor\nANSWER: NO\n\nDo not use any other labels."
+    },
+    {
+      "technique": "structured_prompting",
+      "variant": "template",
+      "domain": "books",
+      "prompt": "You are an expert in Book Entity Matching for the matchbench/semi-homo repository (Hugging Face). Both Book A and Book B have the same attribute structure. Fill in the following template and then give a final YES/NO decision.\n\nBOOK A\n------\nTitle:\nAuthor(s):\nISBN / Publisher / Edition / Year (if present):\n\nBOOK B\n------\nTitle:\nAuthor(s):\nISBN / Publisher / Edition / Year (if present):\n\nCOMPARISON\n----------\nSimilarities:\nDifferences:\n\nDECISION\n--------\nAre Book A and Book B duplicates (the same real-world book)?\n\nAnswer strictly with one token on the last line:\nYES\nor\nNO"
+    }
+  ]
+}

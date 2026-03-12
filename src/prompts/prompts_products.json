@@ -1,0 +1,39 @@
+{
+  "prompts": [
+    {
+      "technique": "zero_shot",
+      "variant": "general",
+      "prompt": "You will receive the description of two entities (A and B). Your task is to decide if they refer to the same real‑world entity (i.e., they are duplicates).\n\nCarefully consider:\n- Small textual variations (abbreviations, punctuation, spelling)\n- Different formats for numbers and units\n- Missing or slightly different field names\n\nAnswer strictly with one token:\n- YES  → if A and B are duplicates (same entity)\n- NO   → if A and B are not duplicates\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "zero_shot",
+      "variant": "domain_specific",
+      "domain": "ecommerce_products",
+      "prompt": "You are an expert in product Entity Matching for e‑commerce catalogs. You will receive two products from e‑commerce websites (Product A and Product B). Decide if they are the same product listed on different sites.\n\nConsider in particular:\n- Product title and model\n- Brand/manufacturer\n- Key attributes (size, capacity, color, edition, version)\n- Obvious differences that indicate different products\n\nAnswer strictly with one token:\n- YES  → if the two products are duplicates (same product)\n- NO   → if they are different products\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "few_shot",
+      "variant": "positive_negative",
+      "domain": "ecommerce_products",
+      "prompt": "You are an expert in product Entity Matching for e‑commerce catalogs. You will be given a few labeled examples first, and then a new pair to classify.\n\nTask: decide if Product A and Product B are duplicates (same real‑world product).\n\nExamples:\n[EXAMPLE 1 – DUPLICATE]\nProduct A: \"Apple iPhone 15 Pro 256GB, Graphite\"\nProduct B: \"iPhone 15 Pro by Apple, 256 GB, Gray\"\nLabel: YES\n\n[EXAMPLE 2 – NOT DUPLICATE]\nProduct A: \"PlayStation 5 Console\"\nProduct B: \"Xbox Series X Console\"\nLabel: NO\n\nNow classify the new pair. Answer strictly with one token:\n- YES  → if they are duplicates\n- NO   → if they are not duplicates\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "few_shot",
+      "variant": "negative_positive",
+      "domain": "ecommerce_products",
+      "prompt": "You are an expert in product Entity Matching for e‑commerce catalogs. You will see a few labeled examples that start with non‑duplicates and then duplicates.\n\nTask: decide if Product A and Product B are duplicates (same real‑world product).\n\nExamples:\n[EXAMPLE 1 – NOT DUPLICATE]\nProduct A: \"Samsung Galaxy S24 Ultra 256GB\"\nProduct B: \"Apple iPhone 15 Pro 256GB\"\nLabel: NO\n\n[EXAMPLE 2 – DUPLICATE]\nProduct A: \"Nintendo Switch OLED Console White\"\nProduct B: \"Nintendo Switch OLED Model, White Joy‑Con\"\nLabel: YES\n\nNow classify the new pair. Answer strictly with one token:\n- YES  → if they are duplicates\n- NO   → if they are not duplicates\n\nDo not output anything other than YES or NO."
+    },
+    {
+      "technique": "chain_of_thought",
+      "variant": "guided_comparison",
+      "domain": "ecommerce_products",
+      "prompt": "You are an expert in product Entity Matching for e‑commerce.\nYour task is to decide if two products (A and B) are duplicates.\n\nThink step by step:\n1. Compare product titles and model identifiers.\n2. Compare brand/manufacturer.\n3. Compare the most important attributes (e.g., capacity, size, color, edition).\n4. Note any strong similarities and any strong differences.\n5. Based on this reasoning, decide if they are the same product.\n\nFirst, write your reasoning in a short paragraph.\nThen, on a new line, output the final label in the format:\nANSWER: YES\nor\nANSWER: NO\n\nDo not use any other labels."
+    },
+    {
+      "technique": "structured_prompting",
+      "variant": "template",
+      "domain": "ecommerce_products",
+      "prompt": "You are an expert in product Entity Matching for e‑commerce websites.\nFill in the following template and then give a final YES/NO decision.\n\nPRODUCT A\n---------\nTitle:\nBrand/Manufacturer:\nKey attributes (capacity, size, color, edition, etc.):\n\nPRODUCT B\n---------\nTitle:\nBrand/Manufacturer:\nKey attributes (capacity, size, color, edition, etc.):\n\nCOMPARISON\n----------\nSimilarities:\nDifferences:\n\nDECISION\n--------\nAre Product A and Product B duplicates (the same real‑world product)?\n\nAnswer strictly with one token on the last line:\nYES\nor\nNO"
+    }
+  ]
+}
